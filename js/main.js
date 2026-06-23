@@ -86,10 +86,12 @@
       e.preventDefault();
       var btn = document.getElementById('formSubmit');
       btn.textContent = 'Sending…'; btn.disabled = true;
-      fetch('https://api.web3forms.com/submit', { method: 'POST', body: new FormData(form) })
+      fetch('https://formsubmit.co/ajax/info@flatoutmotorcars.com', {
+        method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form)
+      })
         .then(function (r) { return r.json(); })
         .then(function (res) {
-          if (res.success) {
+          if (res.success === 'true' || res.success === true) {
             document.getElementById('formWrap').style.display = 'none';
             document.getElementById('formSuccess').style.display = 'block';
           } else {
