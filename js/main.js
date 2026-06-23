@@ -74,35 +74,51 @@
     if (day !== 0 && day !== 6) added++;
   }
   var min = d.toISOString().split('T')[0];
-  ['date_1', 'date_2', 'date_3'].forEach(function (n) {
-    var el = document.querySelector('[name="' + n + '"]');
-    if (el) el.min = min;
-  });
 
-  // Submit via Web3Forms
+  // Date pickers: pick a date and it is blacked out in the other two pickers
+  var fps = [];
+  function refreshDisabled() {
+    fps.forEach(function (fp, i) {
+      var taken = [];
+      fps.forEach(function (o, j) { if (j !== i && o.selectedDates[0]) taken.push(o.selectedDates[0]); });
+      fp.set('disable', taken);
+    });
+  }
+  if (window.flatpickr) {
+    ['date_1', 'date_2', 'date_3'].forEach(function (n) {
+      var el = document.querySelector('[name="' + n + '"]');
+      if (!el) return;
+      fps.push(window.flatpickr(el, {
+        minDate: min,
+        dateFormat: 'Y-m-d',
+        altInput: true,
+        altFormat: 'M j, Y',
+        disableMobile: true,
+        onChange: refreshDisabled
+      }));
+    });
+  }
+
+  // Validate three distinct dates, then let the browser submit the form natively
   var form = document.getElementById('driveForm');
+  var errEl = document.getElementById('formError');
+  function showErr(msg) { if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; } }
+  function clearErr() { if (errEl) { errEl.textContent = ''; errEl.style.display = 'none'; } }
+  function val(n) { var el = document.querySelector('[name="' + n + '"]'); return el ? el.value : ''; }
+
   if (form) {
     form.addEventListener('submit', function (e) {
-      e.preventDefault();
+      var v1 = val('date_1'), v2 = val('date_2'), v3 = val('date_3');
+      if (!v1 || !v2 || !v3) { e.preventDefault(); showErr('Please select three preferred drive dates.'); return; }
+      if (v1 < min || v2 < min || v3 < min) { e.preventDefault(); showErr('Each date must be at least 2 business days out.'); return; }
+      if (v1 === v2 || v1 === v3 || v2 === v3) { e.preventDefault(); showErr('Please choose three different dates.'); return; }
+      clearErr();
       var btn = document.getElementById('formSubmit');
-      btn.textContent = 'Sending…'; btn.disabled = true;
-      fetch('https://formsubmit.co/ajax/info@flatoutmotorcars.com', {
-        method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form)
-      })
-        .then(function (r) { return r.json(); })
-        .then(function (res) {
-          if (res.success === 'true' || res.success === true) {
-            document.getElementById('formWrap').style.display = 'none';
-            document.getElementById('formSuccess').style.display = 'block';
-          } else {
-            btn.textContent = 'Try again'; btn.disabled = false;
-            alert('Something went wrong. Please email info@flatoutmotorcars.com.');
-          }
-        })
-        .catch(function () {
-          btn.textContent = 'Try again'; btn.disabled = false;
-          alert('Something went wrong. Please email info@flatoutmotorcars.com.');
-        });
+      if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
+    });
+    ['date_1', 'date_2', 'date_3'].forEach(function (n) {
+      var el = document.querySelector('[name="' + n + '"]');
+      if (el) el.addEventListener('change', clearErr);
     });
   }
 })();

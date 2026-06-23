@@ -229,3 +229,8 @@ section[id], footer[id]{scroll-margin-top:96px}
 .form-success{text-align:center;padding:14px 0 6px}
 .form-success .btn{margin-top:8px}
 @media(max-width:560px){ .form-grid,.dates-grid{grid-template-columns:1fr} .modal{padding:28px 22px 24px} }
+.form-error{display:none;color:var(--red);font-size:13px;margin:0 0 14px;font-family:var(--body)}
+/* Flatpickr brand accents */
+.flatpickr-day.selected,.flatpickr-day.selected:hover,.flatpickr-day.selected:focus{background:var(--red);border-color:var(--red)}
+.flatpickr-day.today{border-color:var(--red)}
+.flatpickr-calendar{z-index:9999}

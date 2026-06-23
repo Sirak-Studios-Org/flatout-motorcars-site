@@ -15,6 +15,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/themes/dark.css">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -250,10 +252,11 @@
       <span class="eyebrow">Request a private drive</span>
       <h3 class="display">Put yourself in the seat</h3>
       <p class="modal-sub">Tell us a little about you and your preferred dates. We will confirm logistics and reach out to lock a time.</p>
-      <form id="driveForm">
+      <form id="driveForm" action="https://formsubmit.co/info@flatoutmotorcars.com" method="POST">
         <input type="hidden" name="_subject" value="New Drakan drive request">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="http://flatoutmotorcars.com/thank-you.html">
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
         <div class="form-grid">
           <div class="field"><label>Full name</label><input type="text" name="name" required></div>
@@ -268,24 +271,20 @@
           <label>Top 3 preferred test-drive dates</label>
           <div class="dates-grid">
             <input type="date" name="date_1" required>
-            <input type="date" name="date_2">
-            <input type="date" name="date_3">
+            <input type="date" name="date_2" required>
+            <input type="date" name="date_3" required>
           </div>
         </div>
-        <p class="form-note" id="dateNote">Earliest selectable date reflects a 2 business day minimum so we can coordinate logistics.</p>
+        <p class="form-note" id="dateNote">Choose three different dates. The earliest reflects a 2 business day minimum so we can coordinate logistics.</p>
+        <p class="form-error" id="formError" role="alert"></p>
         <div class="field full"><label>Anything else (optional)</label><textarea name="message" placeholder="What draws you to the Drakan?"></textarea></div>
         <button type="submit" class="btn btn-red" id="formSubmit">Request my drive</button>
       </form>
     </div>
-    <div id="formSuccess" class="form-success" style="display:none">
-      <span class="eyebrow">Received</span>
-      <h3 class="display">Request received</h3>
-      <p class="modal-sub">Thank you. We will be in touch shortly to confirm your drive.</p>
-      <button class="btn btn-ghost" id="successClose">Close</button>
-    </div>
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
