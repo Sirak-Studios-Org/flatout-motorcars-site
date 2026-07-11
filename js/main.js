@@ -45,6 +45,9 @@
   if (!modal) return;
   var body = document.body;
 
+  // GA4 event helper (no-op if gtag is unavailable)
+  function track(name, params) { if (window.gtag) window.gtag('event', name, params || {}); }
+
   function openModal() {
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
@@ -57,7 +60,12 @@
   }
 
   document.querySelectorAll('.js-open-form').forEach(function (b) {
-    b.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
+    b.addEventListener('click', function (e) {
+      e.preventDefault();
+      var label = (b.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 50);
+      track('drive_modal_open', { cta_location: label || 'unknown' });
+      openModal();
+    });
   });
   var mc = document.getElementById('modalClose');
   if (mc) mc.addEventListener('click', closeModal);
@@ -117,6 +125,7 @@
       if (v1 < min || v2 < min || v3 < min) { e.preventDefault(); showErr('Each date must be at least 2 business days out.'); return; }
       if (v1 === v2 || v1 === v3 || v2 === v3) { e.preventDefault(); showErr('Please choose three different dates.'); return; }
       clearErr();
+      track('drive_form_submit', { build: val('build') || 'unknown' });
       var btn = document.getElementById('formSubmit');
       if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
 
