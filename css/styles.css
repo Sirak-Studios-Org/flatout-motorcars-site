@@ -129,6 +129,7 @@ section{position:relative}
 
 /* Quotes */
 .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.quotes.quotes-2{grid-template-columns:repeat(2,1fr);gap:40px;max-width:880px}
 .quote{border-left:2px solid var(--red);padding:6px 0 6px 22px}
 .quote p{font-family:var(--display);font-weight:500;font-size:21px;line-height:1.32;color:#fff;text-transform:none}
 .quote .who{margin-top:14px}
