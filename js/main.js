@@ -113,6 +113,17 @@
       if (v1 < min || v2 < min || v3 < min) { e.preventDefault(); showErr('Each date must be at least 2 business days out.'); return; }
       if (v1 === v2 || v1 === v3 || v2 === v3) { e.preventDefault(); showErr('Please choose three different dates.'); return; }
       clearErr();
+      // Log the lead to the CRM (Airtable webhook). Fire-and-forget; never blocks the email or redirect.
+      try {
+        fetch('https://hooks.airtable.com/workflows/v1/genericWebhook/appyQUD5TadHumevI/wflVI7AvC9PZYe18x/wtrY2ll62iVDOVP1Z', {
+          method: 'POST', mode: 'no-cors', keepalive: true,
+          body: JSON.stringify({
+            name: val('name'), email: val('email'), phone: val('phone'),
+            build: val('build'), experience: val('experience'), fastest_car: val('fastest_car'),
+            timeline: val('timeline'), date_1: v1, date_2: v2, date_3: v3, message: val('message')
+          })
+        });
+      } catch (err) {}
       var btn = document.getElementById('formSubmit');
       if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
     });
