@@ -245,9 +245,16 @@ section[id], footer[id]{scroll-margin-top:96px}
 .flatpickr-calendar{z-index:9999}
 
 /* ============ Instagram feed ============ */
-.ig-wrap{max-width:760px;margin:0 auto;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg-2)}
+.ig-wrap{max-width:760px;margin:0 auto;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg-2);container-type:inline-size}
 .ig-wrap-lg{max-width:900px}
-.ig-embed{display:block;width:100%;height:640px;border:0;background:var(--bg-2)}
-.ig-wrap-lg .ig-embed{height:900px}
+.ig-embed{display:block;width:100%;height:672px;border:0;background:var(--bg-2)}
+.ig-wrap-lg .ig-embed{height:770px}
 .ig-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:28px}
-@media(max-width:560px){ .ig-embed{height:560px} .ig-wrap-lg .ig-embed{height:760px} }
+@media(max-width:560px){ .ig-embed{height:480px} .ig-wrap-lg .ig-embed{height:480px} }
+/* Size the embed to its content: header block plus two rows of square tiles (width/3 each). Calibrated against the live embed. */
+@supports (width:1cqw){
+  .ig-embed,.ig-wrap-lg .ig-embed{height:calc(164px + 66.667cqw)}
+  @media(max-width:560px){ .ig-embed,.ig-wrap-lg .ig-embed{height:calc(156px + 66.667cqw)} }
+}
+/* The feed sits below the red call-to-action band on the home page, so it needs its own top padding */
+.cta-band + #media{padding-top:clamp(64px,9vw,120px) !important}
